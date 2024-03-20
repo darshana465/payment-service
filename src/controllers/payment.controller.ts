@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import StripeService from '../services/stripe.service';
 import RequestService from '../services/request.service';
 import { PaymentProcessor } from '../lib/payment-processor';
-const stripe = require('stripe')('sk_test_51OWYVbSJzDxzlcVNtqr9Tzcp49xyxwJuOF4aOZhy329WumETyAM82RQeb4vSIBrLas3n9Qha22EMymvqbTKSaas600mn4MRuSE');
+const stripe = require('stripe')('sk_test_51O0pqvKonAbBLC7krfo6HqpSiDU44XM4wY0JhrvganxzHbDkLefyZkCCatw1mUxcAnbdEmB6Uf2AkngtvruqPR9u00gdi3BhBp');
 
 
 class PaymentController {
@@ -33,7 +33,7 @@ class PaymentController {
       console.log(res);
       const account = req.body.data.object;
       if (account.details_submitted && account.charges_enabled) {
-        const options = { method: 'POST', uri: `${process.env.RAILS_SERVER}/providers/${account.meta.providerId}/stripe-callback`}
+        const options = { method: 'POST', uri: `http:localhost:3000/providers/${account.meta.providerId}/stripe-callback`}
         await RequestService.httpRequest(options);
       }
       res.status(200).json({message: 'Account updated successfully'});
