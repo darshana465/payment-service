@@ -12,6 +12,6 @@ router.post('/account', PaymentController.accountUpdates);
 
 router.get('/stripe-callback', PaymentController.accountUpdates);
 
-router.post('/create-payment-intent', PaymentController.createPaymentIntent);
+router.get('/create-payment-intent', PaymentController.createPaymentIntent);
 
 export default router;
