@@ -1,10 +1,10 @@
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 // Define a route for the homepage
 app.get('/', (req, res) => {
-  res.send('Hello, Express.js here!');
+  res.send('Hello, Express.js!');
 });
 
 // Define a route for a sample API endpoint
