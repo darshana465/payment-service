@@ -1,5 +1,5 @@
 import express, { Application } from 'express';
-import cors from 'cors';
+// import cors from 'cors';
 import morgan from 'morgan';
 import routes from './routes/index.routes';
 const dotenv = require('dotenv');
