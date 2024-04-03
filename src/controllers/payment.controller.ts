@@ -33,7 +33,7 @@ class PaymentController {
       console.log(res);
       const account = req.body.data.object;
       if (account.details_submitted && account.charges_enabled) {
-        const options = { method: 'POST', uri: `http:localhost:3000/providers/${account.meta.providerId}/stripe-callback`}
+        const options = { method: 'GET', uri: `https://ahdevelop-pr-47718.herokuapp.com/providers/${account.metadata.providerId}/stripe-callback`}
         await RequestService.httpRequest(options);
       }
       res.status(200).json({message: 'Account updated successfully'});

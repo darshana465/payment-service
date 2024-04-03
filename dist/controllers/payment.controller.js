@@ -14,12 +14,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const request_service_1 = __importDefault(require("../services/request.service"));
 const payment_processor_1 = require("../lib/payment-processor");
-const stripe = require('stripe')('sk_test_51OWYVbSJzDxzlcVNtqr9Tzcp49xyxwJuOF4aOZhy329WumETyAM82RQeb4vSIBrLas3n9Qha22EMymvqbTKSaas600mn4MRuSE');
+const stripe = require('stripe')('sk_test_51O0pqvKonAbBLC7krfo6HqpSiDU44XM4wY0JhrvganxzHbDkLefyZkCCatw1mUxcAnbdEmB6Uf2AkngtvruqPR9u00gdi3BhBp');
 class PaymentController {
     charge(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                res.status(200).json({ message: 'charges succcessfull' });
+                res.status(200).json({ message: 'charges are succcessfull' });
             }
             catch (error) {
                 res.status(500).json({ error: 'Internal Server Error' });
@@ -48,7 +48,7 @@ class PaymentController {
                 console.log(res);
                 const account = req.body.data.object;
                 if (account.details_submitted && account.charges_enabled) {
-                    const options = { method: 'POST', uri: `${process.env.RAILS_SERVER}/providers/${account.meta.providerId}/stripe-callback` };
+                    const options = { method: 'GET', uri: `https://ahdevelop-pr-47718.herokuapp.com/providers/${account.metadata.providerId}/stripe-callback` };
                     yield request_service_1.default.httpRequest(options);
                 }
                 res.status(200).json({ message: 'Account updated successfully' });
@@ -93,3 +93,4 @@ class PaymentController {
     }
 }
 exports.default = new PaymentController();
+//# sourceMappingURL=payment.controller.js.map

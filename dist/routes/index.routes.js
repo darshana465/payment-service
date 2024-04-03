@@ -11,5 +11,6 @@ router.get('/charge', payment_controller_1.default.charge);
 router.get('/:providerId/onboarding', payment_controller_1.default.onboard);
 router.post('/account', payment_controller_1.default.accountUpdates);
 router.get('/stripe-callback', payment_controller_1.default.accountUpdates);
-router.post('/create-payment-intent', payment_controller_1.default.createPaymentIntent);
+router.get('/create-payment-intent', payment_controller_1.default.createPaymentIntent);
 exports.default = router;
+//# sourceMappingURL=index.routes.js.map

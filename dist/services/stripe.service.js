@@ -11,14 +11,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 class StripeService {
     constructor() {
-        this.stripe = require('stripe')('sk_test_51OWYVbSJzDxzlcVNtqr9Tzcp49xyxwJuOF4aOZhy329WumETyAM82RQeb4vSIBrLas3n9Qha22EMymvqbTKSaas600mn4MRuSE');
+        this.stripe = require('stripe')('sk_test_51O0pqvKonAbBLC7krfo6HqpSiDU44XM4wY0JhrvganxzHbDkLefyZkCCatw1mUxcAnbdEmB6Uf2AkngtvruqPR9u00gdi3BhBp');
     }
     onboard(providerId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const account = yield this.stripe.accounts.create({
-                    country: 'IN',
-                    type: 'standard',
+                    country: 'US',
+                    type: 'express',
                     business_type: 'individual',
                     metadata: {
                         providerId
@@ -27,8 +27,8 @@ class StripeService {
                 console.log(account);
                 const accountLink = yield this.stripe.accountLinks.create({
                     account: account.id,
-                    refresh_url: `https://e188-2405-201-3016-b346-d576-a8f6-b6e8-c4f7.ngrok-free.app/api/stripe-callback`,
-                    return_url: `https://e188-2405-201-3016-b346-d576-a8f6-b6e8-c4f7.ngrok-free.app/api/stripe-callback`,
+                    refresh_url: `https://1e87-2405-201-3016-b1aa-d5a3-6437-9b7-f86a.ngrok-free.app/api/stripe-callback`,
+                    return_url: `https://1e87-2405-201-3016-b1aa-d5a3-6437-9b7-f86a.ngrok-free.app/api/stripe-callback`,
                     type: 'account_onboarding',
                 });
                 accountLink.account_id = account.id;
@@ -59,3 +59,4 @@ class StripeService {
     }
 }
 exports.default = new StripeService();
+//# sourceMappingURL=stripe.service.js.map
