@@ -45,6 +45,7 @@ class PaymentController {
   public async createPaymentIntent(req: Request, res: Response): Promise<void> {
     const { items } = req.body;
 
+    console.log('here');
     // Create a PaymentIntent with the order amount and currency
     const paymentIntent = await stripe.paymentIntents.create({
       amount: 1000,
