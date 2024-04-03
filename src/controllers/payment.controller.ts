@@ -8,7 +8,7 @@ const stripe = require('stripe')('sk_test_51O0pqvKonAbBLC7krfo6HqpSiDU44XM4wY0Jh
 class PaymentController {
   public async charge(req: Request, res: Response): Promise<void> {
     try {
-      res.status(200).json({message: 'charges are succcessfull'});
+      res.status(200).json({message: 'charges are sducccessfull'});
     } catch (error) {
       res.status(500).json({ error: 'Internal Server Error' });
     }
