@@ -15,8 +15,8 @@ class StripeService {
 
       const accountLink = await this.stripe.accountLinks.create({
         account: account.id,
-        refresh_url: `https://1e87-2405-201-3016-b1aa-d5a3-6437-9b7-f86a.ngrok-free.app/api/stripe-callback`,
-        return_url: `https://1e87-2405-201-3016-b1aa-d5a3-6437-9b7-f86a.ngrok-free.app/api/stripe-callback`,
+        refresh_url: `https://ahdevelop-pr-47718/providers/${providerId}/stripe-refresh-url`,
+        return_url: `https://ahdevelop-pr-47718/providers/${providerId}/stripe-callback`,
         type: 'account_onboarding',
       });
 
