@@ -15,8 +15,8 @@ class StripeService {
 
       const accountLink = await this.stripe.accountLinks.create({
         account: account.id,
-        refresh_url: `https://ahdevelop-pr-47718/providers/${providerId}/stripe-refresh-callback`,
-        return_url: `https://ahdevelop-pr-47718/providers/${providerId}/stripe-callback`,
+        refresh_url: `https://ahdevelop-pr-47718.herokuapp.com/providers/${providerId}/stripe-refresh-callback`,
+        return_url: `https://ahdevelop-pr-47718.herokuapp.com/providers/${providerId}/stripe-callback`,
         type: 'account_onboarding',
       });
 
