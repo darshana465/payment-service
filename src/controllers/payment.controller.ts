@@ -1,77 +1,75 @@
 import { Request, Response } from 'express';
-import StripeService from '../services/stripe.service';
-import RequestService from '../services/request.service';
-import { PaymentProcessor } from '../lib/payment-processor';
-const stripe = require('stripe')('sk_test_51O0pqvKonAbBLC7krfo6HqpSiDU44XM4wY0JhrvganxzHbDkLefyZkCCatw1mUxcAnbdEmB6Uf2AkngtvruqPR9u00gdi3BhBp');
-
+import PaymentService from '../services/payment.service';
 
 class PaymentController {
+  // Controller method to handle charging
   public async charge(req: Request, res: Response): Promise<void> {
     try {
-      res.status(200).json({message: 'charges are sducccessfull'});
+      // Placeholder response for successful charging
+      res.status(200).json({ message: 'Charges are successful' });
     } catch (error) {
+      // Catch and handle any errors
       res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
-  public async onboard(req: Request, res: Response): Promise<void> {
+  // Controller method to authorize and confirm payment
+  public async authorizeAndConfirmPayment(req: Request, res: Response): Promise<void> {
     try {
-      console.log(req);
-      const paymentProcessor = new PaymentProcessor();
-      const accountLink = await paymentProcessor.onboard(req.params.providerId);
-      console.log(accountLink);
-      res.status(200).json(accountLink);
+      // Call PaymentService to authorize and confirm payment
+      const paymentIntent = await PaymentService.authorizeAndConfirmPayment(req.body);
+      // Respond with the payment intent
+      res.status(200).json(paymentIntent);
     } catch (error) {
-      res.status(500).json({ error: 'Internal Server Error' });
+      // Catch and handle errors during authorization and confirmation
+      console.error('Error while authorizing and confirming payment:', error);
+      res.status(400).json({ error: error });
     }
   }
 
-  public async accountUpdates(req: Request, res: Response): Promise<void> {
+  // Controller method to capture payment
+  public async capturePayment(req: Request, res: Response): Promise<void> {
     try {
-      // const eventLog = StripeService.getEvent(req.headers['stripe-signature'], req.body);
-      console.log(req);
-      console.log(res);
-      const account = req.body.data.object;
-      if (account.details_submitted && account.charges_enabled) {
-        const options = { method: 'GET', uri: `https://ahdevelop-pr-47718.herokuapp.com/providers/${account.metadata.providerId}/stripe-callback`}
-        await RequestService.httpRequest(options);
+      // Extract paymentIntentId from request body or query parameters
+      const paymentIntentId = req.body.paymentIntentId || req.query.paymentIntentId;
+
+      // Validate presence of paymentIntentId
+      if (!paymentIntentId) {
+        res.status(400).json({ error: 'PaymentIntent ID is required' });
+        return;
       }
-      res.status(200).json({message: 'Account updated successfully'});
+
+      // Call PaymentService to capture payment
+      const capturedPaymentIntent = await PaymentService.capturePayment(paymentIntentId);
+      // Respond with the captured payment intent
+      res.status(200).json(capturedPaymentIntent);
     } catch (error) {
-      res.status(500).json({ error: 'Internal Server Error' });
+      // Catch and handle errors during payment capture
+      console.error('Error while capturing payment:', error);
+      res.status(400).json({ error });
     }
   }
 
-  public async createPaymentIntent(req: Request, res: Response): Promise<void> {
-    const { items } = req.body;
-
-    console.log('here');
-    // Create a PaymentIntent with the order amount and currency
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: 1000,
-      currency: "inr",
-      // In the latest version of the API, specifying the `automatic_payment_methods` parameter is optional because Stripe enables its functionality by default.
-      automatic_payment_methods: {
-        enabled: true,
-      },
-    });
-
-    res.status(200).json({
-      clientSecret: paymentIntent.client_secret,
-    });
-  }
-
-  public async stripeCallback(req: Request, res: Response): Promise<void> {
+  // Controller method to initiate payout
+  public async initiatePayout(req: Request, res: Response): Promise<void> {
     try {
-      const paymentProcessor = new PaymentProcessor();
-      const account = await paymentProcessor.getAccount(req.query.providerId);
-      if (account.details_submitted && account.charges_enabled) {
-        const options = { method: 'POST', uri: `${process.env.RAILS_SERVER}/providers/${account.meta.providerId}/stripe-callback`};
-        await RequestService.httpRequest(options);
+      // Extract amount, currency, and destination from request body
+      const { amount, currency, destination } = req.body;
+
+      // Validate presence of required parameters
+      if (!amount || !currency || !destination) {
+        res.status(400).json({ error: 'Amount, currency, and destination are required' });
+        return;
       }
-      res.status(200).json({message: 'Account updated successfully'});
+
+      // Call PaymentService to initiate payout
+      const payout = await PaymentService.initiatePayout(amount, currency, destination);
+      // Respond with the initiated payout details
+      res.status(200).json(payout);
     } catch (error) {
-      res.status(500).json({ error: 'Internal Server Error' });
+      // Catch and handle errors during payout initiation
+      console.error('Error while initiating payout:', error);
+      res.status(400).json({ error });
     }
   }
 }

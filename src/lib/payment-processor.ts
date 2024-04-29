@@ -1,18 +1,18 @@
 import { PaymentStrategy } from './payment-strategy';
-import stripeService from '../services/stripe.service';
+import AccountService from '../services/account.service';
 
 export class PaymentProcessor {
-  private paymentStrategy: PaymentStrategy | undefined = stripeService;
+  private paymentStrategy: PaymentStrategy | undefined = AccountService;
   constructor(paymentStrategy?: PaymentStrategy) {
     this.paymentStrategy = paymentStrategy;
   }
 
   async onboard(data: any) {
-    const result = await stripeService.onboard(data);
+    const result = await AccountService.onboard(data);
     return result;
   }
 
   async getAccount(data: any) {
-    return await stripeService.getAccount(data);
+    return await AccountService.getAccount(data);
   }
 }
