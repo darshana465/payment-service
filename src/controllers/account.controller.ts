@@ -50,6 +50,31 @@ class AccountController {
     }
   }
 
+  public async getAccounts(req: Request, res: Response): Promise<any> {
+    const { accountIds } = req.body;
+
+    // Validate request body
+    if (!accountIds || !Array.isArray(accountIds)) {
+      return res.status(400).json({ error: 'Invalid request body' });
+    }
+
+    const accountInfo: any = {};
+    // Fetch account details for each account ID
+    for (const accountId of accountIds) {
+      try {
+        const account = await AccountService.getAccount(accountId);
+        accountInfo[accountId] = account;
+      } catch (error) {
+        console.error('Error retrieving account details:', error);
+        // If there's an error, set default values for account details
+        accountInfo[accountId] = { details_submitted: false, charges_enabled: false };
+      }
+    }
+
+    // Send the account details as JSON response
+    res.json(accountInfo);
+  }
+
   // Controller method to handle account updates
   public async accountUpdates(req: Request, res: Response): Promise<void> {
     try {
@@ -61,7 +86,7 @@ class AccountController {
         // Prepare options for HTTP request
         const options = {
           method: 'GET',
-          uri: `${process.env.RAILS_SERVER}/providers/${account.metadata.providerId}/stripe-callback`
+          uri: `https://ahdevelop-pr-47718.herokuapp.com/providers/${account.metadata.providerId}/stripe-callback`
         };
 
         // Send HTTP request to update account

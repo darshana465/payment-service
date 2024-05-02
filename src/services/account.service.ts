@@ -1,14 +1,14 @@
 class AccountService {
-  private stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+  private stripe = require('stripe')('sk_test_51O0pqvKonAbBLC7krfo6HqpSiDU44XM4wY0JhrvganxzHbDkLefyZkCCatw1mUxcAnbdEmB6Uf2AkngtvruqPR9u00gdi3BhBp');
 
   // Method to onboard a provider
   public async onboard(providerId: any): Promise<any> {
     try {
       // Create a new account with Stripe
       const account = await this.stripe.accounts.create({
-        country: process.env.COUNTRY,
-        type: process.env.ACCOUNT_TYPE,
-        business_type: process.env.BUSINESS_TYPE,
+        country: 'US',
+        type: 'express',
+        business_type: 'individual',
         metadata: {
           providerId
         }
@@ -20,9 +20,9 @@ class AccountService {
       // Create an account link for onboarding
       const accountLink = await this.stripe.accountLinks.create({
         account: account.id,
-        refresh_url: `${process.env.RAILS_SERVER}/providers/${providerId}/stripe-refresh-callback`,
-        return_url: `${process.env.RAILS_SERVER}/providers/${providerId}/stripe-callback`,
-        type: `${process.env.ACCOUNT_LINK_TYPE}`,
+        refresh_url: `https://ahdevelop-pr-47718.herokuapp.com/providers/${providerId}/stripe-refresh-callback`,
+        return_url: `https://ahdevelop-pr-47718.herokuapp.com/providers/${providerId}/stripe-callback?stripe_onboarded=true`,
+        type: `account_onboarding`,
       });
 
       // Assign the account ID to the account link object

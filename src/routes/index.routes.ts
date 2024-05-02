@@ -11,6 +11,8 @@ router.get('/:providerId/onboarding', AccountController.onboard); // Endpoint fo
 
 router.post('/account', AccountController.accountUpdates); // Endpoint for updating account
 
+router.post('/accounts', AccountController.accountUpdates); // Endpoint for updating account
+
 router.get('/account', AccountController.getAccount); // Endpoint for getting account details
 
 router.post('/authorize', PaymentController.authorizeAndConfirmPayment); // Endpoint for authorizing and confirming payment

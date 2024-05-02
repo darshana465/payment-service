@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import PaymentService from '../services/payment.service';
+import RequestService from '../services/request.service';
 
 class PaymentController {
   // Controller method to handle charging
@@ -70,6 +71,33 @@ class PaymentController {
       // Catch and handle errors during payout initiation
       console.error('Error while initiating payout:', error);
       res.status(400).json({ error });
+    }
+  }
+
+  // Controller method to handle account updates
+  public async paymentUpdates(req: Request, res: Response): Promise<void> {
+    try {
+      const paymentIntent = req.body.data.object;
+
+      // Prepare options for HTTP request
+      const options = {
+        method: 'POST',
+        uri: `${process.env.RAILS_SERVER}/stripe/payments`,
+        body: {
+          paymentIntent: paymentIntent,
+          event: req.body.event
+        }
+      };
+
+      // Send HTTP request to update account
+      await RequestService.httpRequest(options);
+
+      // Respond with success message
+      res.status(200).json({ message: 'Account updated successfully' });
+    } catch (error) {
+      // Catch and handle errors during account updates
+      console.error('Error updating account:', error);
+      res.status(400).json({ error: error });
     }
   }
 }
